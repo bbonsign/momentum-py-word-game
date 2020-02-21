@@ -72,12 +72,13 @@ class Game:
             print(" *** You lost in a spectacular fashion. ***")
             print(f" *** The correct word was: {self.word} ***")
         sleep(1)
-        newgame = input("Play again? (y) or (n): ")
+        newgame = input("\n\nPlay again? (y) or (n): ")
         while not(newgame == 'y' or newgame == 'n'):
             newgame = input("Play again? (y) or (n): ")
         if newgame == 'n':
             exit()
         elif newgame == 'y':
+            print('\n\n\n')
             Game()
 
 
