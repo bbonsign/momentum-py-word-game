@@ -4,15 +4,14 @@ from time import sleep
 
 class Game:
     def __init__(self):
-        self.word = "CHOCOLATE"  # will change in self.start_game()
-        self.wlen = 9  # will change in self.start_game()
-        # will change in self.start_game()
+        self.word = "CHOCOLATE"
+        self.wlen = 9
         self.difficulty = {'min': 0, 'max': 1000}
+        # The above will change when game starts
         self.guess_limit = 8
         self.remaining = 8
         self.player = Player()
         self.playing = True
-        # self.start_game()
 
     def __str__(self):
         return "Hangman style game"
@@ -58,9 +57,7 @@ class Game:
     def start_game(self):
         self.set_difficulty()
         self.choose_word()
-        print(self.word)  # REMOVE LATER
-        print(
-            f"\nThe word contains {self.wlen} letters.  Choose wisely!\n")
+        print(f"\nThe word contains {self.wlen} letters.  Choose wisely!\n")
         print("_ "*self.wlen)
         self.rounds()
 
@@ -111,14 +108,6 @@ class Game:
             print(f" *** The correct word was: {self.word} ***")
         sleep(1)
         self.new_game_prompt()
-        # newgame = input("\n\nPlay again? (y) or (n): ")
-        # while not(newgame == 'y' or newgame == 'n'):
-        #     newgame = input("Play again? (y) or (n): ")
-        # if newgame == 'n':
-        #     exit()
-        # elif newgame == 'y':
-        #     print('\n\n\n')
-        #     Game().start_game()
 
 
 class Player:

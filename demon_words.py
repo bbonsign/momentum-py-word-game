@@ -1,4 +1,3 @@
-import random
 from mystery_word import Game
 
 
@@ -9,8 +8,6 @@ class Melkor(Game):
 
     def __init__(self):
         super().__init__()
-        # self.partial = ''.join(['-' for i in range(self.wlen)])
-        # self.words = None
         self.word_classes = None
 
     @staticmethod
@@ -37,8 +34,6 @@ class Melkor(Game):
             self.word_classes = {key: words}
         self.new_word_classes()
         key, value = max(self.word_classes.items(), key=lambda item: len(item[1]))
-        print([(key,len(value)) for key, value in self.word_classes.items()]) # REMOVE LATER
-        print(self.word)  # REMOVE LATER
         self.word_classes = {key: value}
         if self.remaining == 1:
             self.word = value[0]
