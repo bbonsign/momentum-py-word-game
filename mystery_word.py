@@ -15,6 +15,9 @@ class Game:
     def __str__(self):
         return "Hangman style game"
 
+    def cmp_word(self):
+        return self.word
+
     def get_words(self):
         with open('words.txt', 'r') as f:
             words = f.readlines()
@@ -45,7 +48,7 @@ class Game:
 
     def print_progress(self):
         good_guesses = self.player.guesses['correct']
-        hit_list = [char if char in good_guesses else '_' for char in self.word]
+        hit_list = [char if char in good_guesses else '_' for char in self.cmp_word()]
         print()
         print(' '.join(hit_list))
 
@@ -53,8 +56,8 @@ class Game:
         self.set_difficulty()
         self.choose_word()
         print(
-            f"\nThe word contains {len(self.word)} letters.  Choose wisely!\n")
-        print("_ "*len(self.word))
+            f"\nThe word contains {len(self.cmp_word())} letters.  Choose wisely!\n")
+        print("_ "*len(self.cmp_word()))
         self.rounds()
 
     def rounds(self):
@@ -64,7 +67,7 @@ class Game:
             print(
                 f"\n*** You have {self.guess_limit-decrement} guesses left ***\n")
             guess = self.player.guess()
-            if guess in self.word:
+            if guess in self.cmp_word():
                 print('   Nice!')
                 self.player.guesses['correct'].append(guess)
             else:
@@ -73,8 +76,8 @@ class Game:
             self.print_progress()
             good_guesses = self.player.guesses['correct']
             combined_guesses = ''.join(
-                [char for char in self.word if char in good_guesses])
-            if combined_guesses == self.word:
+                [char for char in self.cmp_word() if char in good_guesses])
+            if combined_guesses == self.cmp_word():
                 self.player.winner = True
                 self.playing = False
             elif len(self.player.guesses['incorrect']) == self.guess_limit:
@@ -88,7 +91,7 @@ class Game:
             print("\n You win!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         else:
             print(" *** You lost in a spectacular fashion. ***")
-            print(f" *** The correct word was: {self.word} ***")
+            print(f" *** The correct word was: {self.cmp_word()} ***")
         sleep(1)
         newgame = input("\n\nPlay again? (y) or (n): ")
         while not(newgame == 'y' or newgame == 'n'):
