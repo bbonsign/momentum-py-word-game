@@ -5,6 +5,7 @@ from time import sleep
 class Game:
     def __init__(self):
         self.word = "CHOCOLATE"  # will change in self.start_game()
+        self.wlen = 9  # will change in self.start_game()
         # will change in self.start_game()
         self.difficulty = {'min': 0, 'max': 1000}
         self.guess_limit = 8
@@ -31,6 +32,7 @@ class Game:
         while not (min <= len(word) <= max):
             word = random.choice(words)
         self.word = word
+        self.wlen = len(word)
 
     def set_difficulty(self):
         diff_levels = {
@@ -56,8 +58,8 @@ class Game:
         self.set_difficulty()
         self.choose_word()
         print(
-            f"\nThe word contains {len(self.cmp_word())} letters.  Choose wisely!\n")
-        print("_ "*len(self.cmp_word()))
+            f"\nThe word contains {self.wlen} letters.  Choose wisely!\n")
+        print("_ "*self.wlen)
         self.rounds()
 
     def rounds(self):
