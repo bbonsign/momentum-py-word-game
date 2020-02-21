@@ -9,9 +9,10 @@ class Game:
         # will change in self.start_game()
         self.difficulty = {'min': 0, 'max': 1000}
         self.guess_limit = 8
+        self.remaining = 8
         self.player = Player()
         self.playing = True
-        self.start_game()
+        # self.start_game()
 
     def __str__(self):
         return "Hangman style game"
@@ -50,13 +51,14 @@ class Game:
 
     def print_progress(self):
         good_guesses = self.player.guesses['correct']
-        hit_list = [char if char in good_guesses else '_' for char in self.cmp_word()]
+        hit_list = [char if char in good_guesses else '_' for char in self.word]
         print()
         print(' '.join(hit_list))
 
     def start_game(self):
         self.set_difficulty()
         self.choose_word()
+        print(self.word)  # REMOVE LATER
         print(
             f"\nThe word contains {self.wlen} letters.  Choose wisely!\n")
         print("_ "*self.wlen)
@@ -65,11 +67,14 @@ class Game:
     def rounds(self):
         while self.playing:
             decrement = len(self.player.guesses['incorrect'])
+            self.remaining = self.guess_limit - decrement
             print('\n'+'='*60)
             print(
-                f"\n*** You have {self.guess_limit-decrement} guesses left ***\n")
-            guess = self.player.guess()
-            if guess in self.cmp_word():
+                f"\n*** You have {self.remaining} guesses left ***\n")
+            self.player.guess()
+            guess = self.player.current_guess
+            self.word = self.cmp_word()
+            if guess in self.word:
                 print('   Nice!')
                 self.player.guesses['correct'].append(guess)
             else:
@@ -77,9 +82,8 @@ class Game:
                 self.player.guesses['incorrect'].append(guess)
             self.print_progress()
             good_guesses = self.player.guesses['correct']
-            combined_guesses = ''.join(
-                [char for char in self.cmp_word() if char in good_guesses])
-            if combined_guesses == self.cmp_word():
+            join_guesses = ''.join([c for c in self.word if c in good_guesses])
+            if join_guesses == self.word:
                 self.player.winner = True
                 self.playing = False
             elif len(self.player.guesses['incorrect']) == self.guess_limit:
@@ -88,13 +92,8 @@ class Game:
                     f"\n{'='*65}\n{'='*65}\n\n*** *** *** *** You are out of guesses. *** *** *** ***\n")
         self.end_game()
 
-    def end_game(self):
-        if self.player.winner:
-            print("\n You win!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        else:
-            print(" *** You lost in a spectacular fashion. ***")
-            print(f" *** The correct word was: {self.cmp_word()} ***")
-        sleep(1)
+    @staticmethod
+    def new_game_prompt():
         newgame = input("\n\nPlay again? (y) or (n): ")
         while not(newgame == 'y' or newgame == 'n'):
             newgame = input("Play again? (y) or (n): ")
@@ -102,13 +101,31 @@ class Game:
             exit()
         elif newgame == 'y':
             print('\n\n\n')
-            Game()
+            Game().start_game()
+
+    def end_game(self):
+        if self.player.winner:
+            print("\n You win!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        else:
+            print(" *** You lost in a spectacular fashion. ***")
+            print(f" *** The correct word was: {self.word} ***")
+        sleep(1)
+        self.new_game_prompt()
+        # newgame = input("\n\nPlay again? (y) or (n): ")
+        # while not(newgame == 'y' or newgame == 'n'):
+        #     newgame = input("Play again? (y) or (n): ")
+        # if newgame == 'n':
+        #     exit()
+        # elif newgame == 'y':
+        #     print('\n\n\n')
+        #     Game().start_game()
 
 
 class Player:
     def __init__(self):
         self.guesses = {'correct': [], 'incorrect': []}
         self.winner = False
+        self.current_guess = ''
 
     def __str__(self):
         return "Courageous human word guesser"
@@ -128,8 +145,9 @@ class Player:
                 continue
             else:
                 valid = True
-        return guess
+        self.current_guess = guess
+        # return guess
 
 
 if __name__ == "__main__":
-    Game()
+    Game().start_game()
