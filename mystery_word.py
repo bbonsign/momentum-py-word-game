@@ -4,9 +4,9 @@ from time import sleep
 
 class Game:
     def __init__(self):
-        self.word = self.choose_word()
-        # self.word = "CHOCOLATE"
-        self.difficulty = 0
+        self.word = "CHOCOLATE"  # will change in self.start_game()
+        # will change in self.start_game()
+        self.difficulty = {'min': 0, 'max': 1000}
         self.guess_limit = 8
         self.player = Player()
         self.playing = True
@@ -23,10 +23,25 @@ class Game:
 
     def choose_word(self):
         words = self.get_words()
-        return random.choice(words)
+        word = random.choice(words)
+        min, max = self.difficulty['min'], self.difficulty['max']
+        while not (min <= len(word) <= max):
+            word = random.choice(words)
+        self.word = word
 
     def set_difficulty(self):
-        pass
+        diff_levels = {
+            'easy': {'min': 4, 'max': 6},
+            'normal': {'min': 6, 'max': 8},
+            'hard': {'min': 8, 'max': 1000}
+        }
+        print(" - Easy: 4-6 letter words")
+        print(" - Normal: 6-8 letter words")
+        print(" - Hard: 8+ letter words")
+        level = input(" Choose easy, normal, or hard: ").lower().strip()
+        while level not in ['easy', 'normal', 'hard']:
+            level = input(" Choose easy, normal, or hard: ").lower().strip()
+        self.difficulty = diff_levels[level]
 
     def print_progress(self):
         good_guesses = self.player.guesses['correct']
@@ -36,8 +51,9 @@ class Game:
 
     def start_game(self):
         self.set_difficulty()
+        self.choose_word()
         print(
-            f"The word contains {len(self.word)} letters.  Good luck chump!\n")
+            f"\nThe word contains {len(self.word)} letters.  Choose wisely!\n")
         print("_ "*len(self.word))
         self.rounds()
 
@@ -56,13 +72,15 @@ class Game:
                 self.player.guesses['incorrect'].append(guess)
             self.print_progress()
             good_guesses = self.player.guesses['correct']
-            combined_guesses = ''.join([char for char in self.word if char in good_guesses])
+            combined_guesses = ''.join(
+                [char for char in self.word if char in good_guesses])
             if combined_guesses == self.word:
                 self.player.winner = True
                 self.playing = False
             elif len(self.player.guesses['incorrect']) == self.guess_limit:
                 self.playing = False
-                print(f"\n{'='*65}\n{'='*65}\n\n*** *** *** *** You are out of guesses. *** *** *** ***\n")
+                print(
+                    f"\n{'='*65}\n{'='*65}\n\n*** *** *** *** You are out of guesses. *** *** *** ***\n")
         self.end_game()
 
     def end_game(self):
