@@ -4,10 +4,10 @@ from time import sleep
 
 class Game:
     def __init__(self):
-        # self.word = self.choose_word()
-        self.word = "CHOCOLATE"
+        self.word = self.choose_word()
+        # self.word = "CHOCOLATE"
         self.difficulty = 0
-        self.guess_limit = 3
+        self.guess_limit = 8
         self.player = Player()
         self.playing = True
         self.start_game()
@@ -29,7 +29,6 @@ class Game:
         pass
 
     def print_progress(self):
-        # guesses = self.player.guesses
         good_guesses = self.player.guesses['correct']
         hit_list = [char if char in good_guesses else '_' for char in self.word]
         print()
@@ -64,10 +63,6 @@ class Game:
             elif len(self.player.guesses['incorrect']) == self.guess_limit:
                 self.playing = False
                 print(f"\n{'='*65}\n{'='*65}\n\n*** *** *** *** You are out of guesses. *** *** *** ***\n")
-        # guessed_word = self.player.guess_word()
-        # if guessed_word == self.word:
-        #     self.player.winner = True
-        #     self.playing = False
         self.end_game()
 
     def end_game(self):
@@ -89,7 +84,6 @@ class Game:
 class Player:
     def __init__(self):
         self.guesses = {'correct': [], 'incorrect': []}
-        # self.word_guesses = []
         self.winner = False
 
     def __str__(self):
@@ -111,12 +105,6 @@ class Player:
             else:
                 valid = True
         return guess
-
-    # def guess_word(self):
-    #     guess = input("\n Guess the word: ").upper()
-    #     while not guess.isalpha():
-    #         guess = input("\n Guess the word: ").upper()
-    #     return guess
 
 
 if __name__ == "__main__":
