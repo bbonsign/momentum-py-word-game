@@ -1,3 +1,4 @@
+import random
 from mystery_word import Game
 
 
@@ -36,7 +37,7 @@ class Melkor(Game):
         key, value = max(self.word_classes.items(), key=lambda item: len(item[1]))
         self.word_classes = {key: value}
         if self.remaining == 1:
-            self.word = value[0]
+            self.word = random.choice(value)
             return value[0]
         return key
 
