@@ -29,7 +29,7 @@ class Melkor(Game):
         self.word_classes = new_classes
 
     def cmp_word(self):
-        if self.remaining == 8:
+        if self.remaining == self.guess_limit:
             words = [word for word in self.get_words() if len(word) == self.wlen]
             key = ''.join(['-' for i in range(self.wlen)])
             self.word_classes = {key: words}
